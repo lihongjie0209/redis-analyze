@@ -37,7 +37,7 @@ Supports standalone, cluster, and sentinel Redis deployment modes.`,
 			opts.Prefixes = []string{"*"}
 		}
 
-		startTime := time.Now()
+startTime := time.Now()
 		fmt.Fprintf(os.Stderr, "\nConnecting to Redis (%s mode)...\n", opts.Mode)
 
 		client, cleanup, err := connector.Connect(ctx, opts)
@@ -46,7 +46,7 @@ Supports standalone, cluster, and sentinel Redis deployment modes.`,
 		}
 		defer cleanup()
 
-		serverInfo := connector.FetchServerInfo(ctx, client, opts)
+serverInfo := connector.FetchServerInfo(ctx, client, opts)
 
 		// Periodic ticker for intermediate reports
 		var ticker *time.Ticker
@@ -180,17 +180,18 @@ func init() {
 	rootCmd.Flags().StringSliceVarP(&opts.Prefixes, "prefix", "P", []string{}, "Key prefix patterns (repeatable, default: *)")
 	rootCmd.Flags().BoolVar(&opts.TLS, "tls", false, "Enable TLS connection")
 	rootCmd.Flags().IntVarP(&opts.Samples, "samples", "s", 5, "MEMORY USAGE sample count")
-	rootCmd.Flags().IntVarP(&opts.TopN, "top", "t", 20, "Number of top largest keys to show")
+	rootCmd.Flags().IntVarP(&opts.TopN, "top", "t", 0, "Number of top largest keys to show (0 = hide)")
 	rootCmd.Flags().IntVarP(&opts.Concurrency, "concurrency", "c", 10, "Scan concurrency level")
 	rootCmd.Flags().IntVar(&opts.Timeout, "timeout", 30, "Connection / scan timeout (seconds)")
 	rootCmd.Flags().StringVarP(&opts.ScanMode, "scan-mode", "", "auto", "Scanning strategy: auto (pipeline→sequential), pipeline, sequential")
 
 	rootCmd.Flags().StringVarP(&opts.Format, "format", "f", "table", "Output format: table, json, csv")
-	rootCmd.Flags().StringVar(&opts.Separator, "separator", ":", "Key prefix separator for grouping")
+	rootCmd.Flags().StringVar(&opts.Separator, "separator", "auto", "Key prefix separator (colon, underscore, hyphen, or auto to try all)")
 	rootCmd.Flags().IntVarP(&opts.PrefixDepth, "depth", "d", 1, "Prefix grouping depth (e.g. depth=2 for a:b:c -> a:b)")
 	rootCmd.Flags().BoolVar(&opts.NoProgress, "no-progress", false, "Disable progress bar")
 	rootCmd.Flags().IntVar(&opts.ReportInterval, "report-interval", 0, "Seconds between intermediate reports (0 = disabled)")
 	rootCmd.Flags().IntVar(&opts.BatchSize, "batch-size", 50, "Keys per pipeline batch (0 = default 50, 1 = sequential mode)")
+	rootCmd.Flags().StringVarP(&opts.Separator, "separator", "", "auto", "Key prefix separator (\":\", \"_\", \"-\", or \"auto\" to try all)")
 }
 
 func ValidateFlags() error {

@@ -22,19 +22,19 @@ func Analyze(keys []models.KeyInfo, serverInfo models.ServerInfo, opts models.Sc
 		return report
 	}
 
-	// Sort keys by size descending for Top N
-	sorted := make([]models.KeyInfo, len(keys))
-	copy(sorted, keys)
-	sort.Slice(sorted, func(i, j int) bool {
-		return sorted[i].Size > sorted[j].Size
-	})
-
-	// Top N keys
-	n := opts.TopN
-	if n > len(sorted) {
-		n = len(sorted)
+	// Top N keys (only if TopN > 0)
+	if opts.TopN > 0 {
+		sorted := make([]models.KeyInfo, len(keys))
+		copy(sorted, keys)
+		sort.Slice(sorted, func(i, j int) bool {
+			return sorted[i].Size > sorted[j].Size
+		})
+		n := opts.TopN
+		if n > len(sorted) {
+			n = len(sorted)
+		}
+		report.TopKeys = sorted[:n]
 	}
-	report.TopKeys = sorted[:n]
 
 	// Type statistics
 	typeMap := make(map[string][]models.KeyInfo)
@@ -146,19 +146,45 @@ func buildPrefixStats(keys []models.KeyInfo, separator string, depth int) []mode
 
 // extractPrefix derives the namespace prefix from a key.
 // e.g., "user:profile:123" with sep=":" depth=2 => "user:profile"
+// If separator is "auto" or empty, tries :, _, - in order.
 func extractPrefix(key, separator string, depth int) string {
-	if separator == "" {
-		separator = ":"
+	if separator == "" || separator == "auto" {
+		return extractPrefixMulti(key, depth)
 	}
 	if depth <= 0 {
 		return key
 	}
-
 	parts := strings.Split(key, separator)
 	if len(parts) <= depth {
 		return strings.Join(parts, separator)
 	}
 	return strings.Join(parts[:depth], separator)
+}
+
+// extractPrefixMulti tries :, _, - and uses the one that appears earliest in the key.
+// If none found, returns the whole key.
+func extractPrefixMulti(key string, depth int) string {
+	if depth <= 0 {
+		return key
+	}
+	seps := []string{":", "_", "-"}
+	bestSep := ""
+	bestIdx := -1
+	for _, sep := range seps {
+		idx := strings.Index(key, sep)
+		if idx >= 0 && (bestIdx < 0 || idx < bestIdx) {
+			bestSep = sep
+			bestIdx = idx
+		}
+	}
+	if bestSep == "" {
+		return key
+	}
+	parts := strings.Split(key, bestSep)
+	if len(parts) <= depth {
+		return strings.Join(parts, bestSep)
+	}
+	return strings.Join(parts[:depth], bestSep)
 }
 
 // calculateSummary computes overall summary statistics.
