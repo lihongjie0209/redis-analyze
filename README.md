@@ -6,7 +6,7 @@ Redis 内存分析 CLI 工具 — 连接 Redis 服务、扫描指定前缀的 ke
 
 ```bash
 # 安装
-go install github.com/gituser/redis-analyze@latest
+go install github.com/lihongjie0209/redis-analyze@latest
 
 # 扫描全部 key
 redis-analyze -H 127.0.0.1 -p 6379 -P '*'

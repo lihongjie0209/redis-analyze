@@ -9,7 +9,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/gituser/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
 )
 
 // Connect creates a redis.UniversalClient based on the provided options.

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gituser/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
 )
 
 // RenderJSON renders the report as pretty-printed JSON.
