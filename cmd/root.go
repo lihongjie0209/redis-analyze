@@ -9,11 +9,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/gituser/redis-analyze/internal/analyzer"
-	"github.com/gituser/redis-analyze/internal/connector"
-	"github.com/gituser/redis-analyze/internal/models"
-	"github.com/gituser/redis-analyze/internal/reporter"
-	"github.com/gituser/redis-analyze/internal/scanner"
+	"github.com/lihongjie0209/redis-analyze/internal/analyzer"
+	"github.com/lihongjie0209/redis-analyze/internal/connector"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/reporter"
+	"github.com/lihongjie0209/redis-analyze/internal/scanner"
 )
 
 var opts models.ScanOptions
@@ -37,7 +37,7 @@ Supports standalone, cluster, and sentinel Redis deployment modes.`,
 			opts.Prefixes = []string{"*"}
 		}
 
-startTime := time.Now()
+	startTime := time.Now()
 		fmt.Fprintf(os.Stderr, "\nConnecting to Redis (%s mode)...\n", opts.Mode)
 
 		client, cleanup, err := connector.Connect(ctx, opts)
@@ -46,7 +46,7 @@ startTime := time.Now()
 		}
 		defer cleanup()
 
-serverInfo := connector.FetchServerInfo(ctx, client, opts)
+	serverInfo := connector.FetchServerInfo(ctx, client, opts)
 
 		// Periodic ticker for intermediate reports
 		var ticker *time.Ticker

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gituser/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
 )
 
 // Analyze processes a slice of KeyInfo and produces a full Report.

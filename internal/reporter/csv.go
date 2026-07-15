@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/gituser/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
 )
 
 // RenderCSV renders the report in CSV format with separate sections.

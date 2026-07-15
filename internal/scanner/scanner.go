@@ -10,7 +10,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/schollz/progressbar/v3"
 
-	"github.com/gituser/redis-analyze/internal/models"
+	"github.com/lihongjie0209/redis-analyze/internal/models"
 )
 
 const scanCount = 100 // keys per SCAN call

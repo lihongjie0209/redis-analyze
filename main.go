@@ -1,6 +1,6 @@
 package main
 
-import "github.com/gituser/redis-analyze/cmd"
+import "github.com/lihongjie0209/redis-analyze/cmd"
 
 func main() {
 	cmd.Execute()
